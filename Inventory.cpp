@@ -1,33 +1,19 @@
 #include "Inventory.h"
-#include "Car.h"
 #include <iostream>
 
 using namespace std;
 
-
+// Initilizes the inventory 
  Inventory::Inventory() {
-	 Inventory inventroy[MAX_CARS];
-	 Inventory::carCount = 0;
+	 
+
+	 cars = new Car*[MAX_CARS];
+	 
+	 carCount = 0;
 
 }
-// Car return functions to get private attributes 
-string Car::getVIN() const {
-	return vin;
- }
-string Car::getMake() const {
-	return make;
-}
-string Car::getModel() const {
-	return model;
-}
-int Car::getYear() const {
-	return year;
-}
-int Car::getSpeedInMPH() const{
-	return speedInMPH;
-}
 
-// Inventory return functions to get private attributes 
+// Inventory return operations to get private attributes 
 int Inventory::getCount() const {
 	return carCount;
 }
@@ -42,33 +28,65 @@ bool Inventory::hasCar(string vin) const {
 	return false;
 }
 
+
+
+// Add a car to the inventory
 void Inventory::add(Car* car) {
 	
 
 	if (carCount >= MAX_CARS) {
-		cout << "The car inventory is full!";
+		cout << "The car inventory is full! \n";
 	}
-	else if (Inventory::hasCar(car->getVIN())) {
-		cout << "This car is already in the inventory. It will be ignored. ";
+	else if (hasCar(car->getVIN())) {
+		cout << "This car is already in the inventory. It will be ignored. \n";
 	}
 	else {
-		Inventory::cars[carCount] = car;
+		cars[carCount] = car;
+		carCount++;
 	}
 
 
 
-	
-
-
-
-	
 }
 
-void Car::accelerate() {
-	speedInMPH += 5;
+
+// Removes a car from the inventory when the VIN is passed.
+void Inventory::remove(string vin) {
+
+	
+
+	if (hasCar(vin)) {
+		Car** tempCars;
+		tempCars = new Car * [carCount];
+		bool vinFound = false;
+		for (int i = 0; i < carCount; i++) {
+			if (cars[i]->getVIN() == vin) {
+				vinFound = true;
+			}
+
+			if (!vinFound) {
+				tempCars[i] = cars[i];
+			}
+			else {
+				tempCars[i] = cars[i + 1];
+			}
+			
+		}
+		// Sets cars to new cars with vin removed. Deincrments carcount
+		cars = tempCars;	
+		
+		carCount--;
+
+	}
+	else {
+		cout << "This car VIN does not exist in the inventory. \n";
+	}
 }
 
-void Car::decelerate() {
-	speedInMPH -= 5;
+
+
+// Deletes the car inventory (destructor)
+Inventory::~Inventory() {
+	delete[] cars;
 }
 

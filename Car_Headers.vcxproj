@@ -143,6 +143,7 @@
     <ClInclude Include="Inventory.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Car.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="t_Inventory.cpp" />
   </ItemGroup>
